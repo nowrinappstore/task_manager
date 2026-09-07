@@ -44,7 +44,8 @@ class _TaskCardState extends State<TaskCard> {
   }
 
   Future<void> changeStatusTask (String status)async{
-    final ApiResponse response = await ApiCaller.getRequest(url: TMUrls.updateTaskStatusURL(widget.taskModel.sId.toString(),status));
+    final ApiResponse response = await ApiCaller.getRequest(url:
+    TMUrls.updateTaskStatusURL(widget.taskModel.sId.toString(),status));
 setState(() {
 
 });
@@ -57,55 +58,50 @@ setState(() {
     }
   }
 
-  void showChangeStatusDialog(){
-    showDialog(context: context, builder: (context)=>AlertDialog(
+  Future<void> showChangeStatusDialog(BuildContext context, String currentStatus) async {
+    String selectedStatus = currentStatus;
 
-      title: Text('Change Status'),
-      content:Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Card(
-            child: ListTile(
-              title: Text('New'),
-              onTap: (){
-                changeStatusTask('New');
-              },
-              trailing: widget.taskModel.status == 'New' ? Icon(Icons.check_circle,color: Colors.green,) : null,
-            ),
-          ),
-          Card(
-            child: ListTile(
-              title: Text('Progress'),
-              onTap: (){
-                changeStatusTask('Progress');
-              },
-              trailing: widget.taskModel.status == 'Progress' ? Icon(Icons.check_circle,color: Colors.green,) : null,
-            ),
-          ),
-          Card(
-            child: ListTile(
-              title: Text('Completed'),
-              onTap: (){
-                changeStatusTask('Completed');
-              },
-              trailing: widget.taskModel.status == 'Completed' ? Icon(Icons.check_circle,color: Colors.green,) : null,
-            ),
-          ),
-          Card(
-            child: ListTile(
-              title: Text('Cancelled'),
-              onTap: (){
-                changeStatusTask('Cancelled');
-              },
-              trailing: widget.taskModel.status == 'Cancelled' ? Icon(Icons.check_circle,color: Colors.green,) : null,
-
-            ),
-          ),
-
-        ],
-      ) ,
-    ));
-
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setStateDialog) {
+            return AlertDialog(
+              title: const Text('Change Status'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: ['New', 'Progress', 'Completed', 'Cancelled']
+                    .map((status) => RadioListTile<String>(
+                  title: Text(status),
+                  value: status,
+                  groupValue: selectedStatus,
+                  onChanged: (value) {
+                    setStateDialog(() {
+                      selectedStatus = value!;
+                    });
+                  },
+                ))
+                    .toList(),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('Cancel'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    // এখানে API call / status update logic দিন
+                    changeStatusTask(selectedStatus);
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Update'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
   }
 
   @override
@@ -148,7 +144,8 @@ setState(() {
                   // ================= EDIT =================
                   IconButton(
                     onPressed:(){
-                      showChangeStatusDialog();
+                      showChangeStatusDialog(context,widget.taskModel.status ?? 'NEW');
+
 
                     },
 

@@ -96,7 +96,16 @@ class _SignUpScreenState extends State<UpdateProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: TmAppBar(),
+      appBar: AppBar(
+        backgroundColor: Colors.green,
+        actions: [
+          IconButton(onPressed: ()
+          {
+            AuthController.clearUserData(context);
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
+          }, icon: Icon(Icons.logout))
+        ],
+      ),
       body: ScreenBG(
         child: SafeArea(
           child: SingleChildScrollView(

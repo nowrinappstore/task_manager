@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_manager/task_manager/models/user_model.dart';
 
@@ -76,13 +77,15 @@ class AuthController {
 
   // ================= LOGOUT =================
 
-  static Future<void> clearUserData() async {
+  static Future<void> clearUserData(BuildContext context) async {
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
 
  await sharedPreferences.clear();
 
-    userToken = null;
-    userData = null;
+
   }
+
+
+
 }

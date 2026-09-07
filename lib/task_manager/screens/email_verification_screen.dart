@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../models/api_response.dart';
+import '../service/api_caller.dart';
+import '../utils/urls.dart';
+
 class RecoverVerifyEmail extends StatefulWidget {
   const RecoverVerifyEmail({super.key});
 
@@ -69,7 +73,7 @@ class _RecoverVerifyEmailState extends State<RecoverVerifyEmail> {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
                           String email = emailController.text.trim();
 
                           if (email.isEmpty) {
@@ -82,6 +86,10 @@ class _RecoverVerifyEmailState extends State<RecoverVerifyEmail> {
                           }
 
                           // এখানে Verify Email API call করবেন
+
+                          final ApiResponse response = await ApiCaller.getRequest(
+                            url: TMUrls.recoverVerifyEmailURL(emailController.text.trim()),
+                          );
                         },
                         child: const Text('Send Code'),
                       ),

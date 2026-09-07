@@ -211,15 +211,19 @@ class _SignUpScreenState extends State<SignupScreen> {
                   const SizedBox(height: 20),
 
                   // Sign Up Button
-                  FilledButton(
-                    onPressed: isLoading ? null : onTapSignUP,
-                    child: isLoading
-                        ? const SizedBox(
-                            height: 25,
-                            width: 25,
-                            child: CircularProgressIndicator(strokeWidth: 2),
-                          )
-                        : const Icon(Icons.arrow_forward_ios_sharp, size: 30),
+                  SizedBox(
+                    width: double.infinity,
+                    child: FilledButton(
+                      onPressed: isLoading ? null : onTapSignUP,
+                      child: isLoading
+                          ? const SizedBox(
+                              height: 25,
+                              width: 25,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            )
+
+                          : const Icon(Icons.arrow_forward_ios_sharp, size: 30),
+                    ),
                   ),
 
                   const SizedBox(height: 30),

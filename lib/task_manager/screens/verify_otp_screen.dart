@@ -30,11 +30,11 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
       isLoading = true;
     });
 
-    final response = await ApiCaller.postRequest(
-
-      url: TMUrls.verifyOTPURL,
-      body: {'email': widget.email, 'OTP': otp},
+    final response = await ApiCaller.getRequest(
+      url: TMUrls.verifyOTPURL(widget.email, otp),
     );
+
+    if (!mounted) return;
 
     setState(() {
       isLoading = false;
@@ -44,7 +44,6 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('OTP verified successfully')),
       );
-
       Navigator.pop(context, true);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -65,10 +64,8 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Verify OTP')),
-
       body: Padding(
         padding: const EdgeInsets.all(20),
-
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -76,36 +73,41 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
               'OTP Verification',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
-
             const SizedBox(height: 10),
-
             Text(
               'Enter the OTP sent to ${widget.email}',
               textAlign: TextAlign.center,
             ),
-
             const SizedBox(height: 25),
-
             TextField(
               controller: otpController,
               keyboardType: TextInputType.number,
               maxLength: 6,
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 20, letterSpacing: 8),
               decoration: const InputDecoration(
                 labelText: 'OTP',
                 hintText: 'Enter OTP',
+                counterText: '',
                 border: OutlineInputBorder(),
               ),
+              onSubmitted: isLoading ? null : (_) => verifyOtp(),
             ),
-
             const SizedBox(height: 20),
-
             SizedBox(
               width: double.infinity,
               height: 50,
               child: ElevatedButton(
                 onPressed: isLoading ? null : verifyOtp,
                 child: isLoading
-                    ? const CircularProgressIndicator()
+                    ? const SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: Colors.white,
+                  ),
+                )
                     : const Text('Verify OTP'),
               ),
             ),
