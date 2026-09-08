@@ -33,14 +33,14 @@ class TmAppBar extends StatelessWidget implements PreferredSizeWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '${AuthController.userData?.firstName} ${AuthController.userData?.lastName}',
+                  '${AuthController.userData?.firstName??'Not found'} ${AuthController.userData?.lastName??'Not Found'}',
                   style: Theme.of(
                     context,
                   ).textTheme.titleSmall!.copyWith(color: Colors.white),
                 ),
 
                 Text(
-                  AuthController.userData!.email.toString(),
+                  AuthController.userData!.email.toString()??'Not Found',
                   style: Theme.of(
                     context,
                   ).textTheme.titleSmall!.copyWith(color: Colors.white),
