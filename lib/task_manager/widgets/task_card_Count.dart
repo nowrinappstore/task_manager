@@ -17,7 +17,7 @@ class TaxCardCount extends StatelessWidget {
         child: Column(
           children: [
             Text(count.toString(),style: Theme.of(context).textTheme.titleLarge,),
-            Text(title),
+            Text(title,style: TextStyle(color: Colors.black,fontSize: 12),),
           ],
         ),
       ),
